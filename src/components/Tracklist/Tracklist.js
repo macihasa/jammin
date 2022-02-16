@@ -1,14 +1,20 @@
 import './Tracklist.css';
 import React from 'react';
 import Track from '../Track/Track';
-const Tracklist = ({ tracks }) => {
-  let list = tracks.map((track, index) => {
+const Tracklist = ({ tracks, onAdd, onRemove, isRemoval }) => {
+  // Returns a all the list items
+  let list = tracks.map((tracks) => {
     return (
-      <li key={index}>
-        <Track name={track.name} artist={track.artist} album={track.album} />
-      </li>
+      <Track
+        track={tracks}
+        key={tracks.id}
+        onAdd={onAdd}
+        onRemove={onRemove}
+        isRemoval={isRemoval}
+      />
     );
   });
+
   return (
     <div className="Tracklist">
       <ul>{list}</ul>

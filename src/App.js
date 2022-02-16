@@ -9,50 +9,72 @@ function App() {
   // States ---------
   const [searchResults, setsearchResults] = useState([
     {
+      id: '1',
       name: 'Best friend',
       artist: 'Billy Joel',
       album: 'Long lasting journey',
     },
     {
+      id: '2',
       name: 'Purple Haze',
       artist: 'Jimmy Hendrix',
       album: 'Purple Haze',
     },
   ]);
   const [playlistName, setplaylistName] = useState('New Playlist');
+
   const [playlistTracks, setPlaylistTracks] = useState([
     {
-      id: '1',
-      name: 'loverboy',
-      artist: 'Mwuana',
-      album: 'Nibla',
+      id: '3',
+      name: 'All of the lights',
+      artist: 'Kanye West',
+      album: 'Dark beautiful twisted fantasy',
     },
     {
-      id: '2',
+      id: '4',
       name: 'The Dress',
       artist: 'Dijon',
       album: 'Absolutely',
     },
   ]);
 
-  // Functions ------
+  // 1:01:39 / 2:11:42
+  // Methods/Functions-----------------------------------
+
   const addTrack = (track) => {
-    if (playlistTracks.find((savedTrack) => savedTrack.id === track.id)) {
+    let tracks = playlistTracks;
+
+    if (tracks.find((savedTrack) => savedTrack.id === track.id)) {
+      console.log(tracks);
+      return;
+    } else {
+      tracks.push(track);
+      setPlaylistTracks([...tracks]);
       return;
     }
   };
 
+  const removeTrack = (track) => {
+    let tracks = playlistTracks;
+    tracks = tracks.filter((currentTrack) => {
+      if (currentTrack.id !== track.id) {
+        return track;
+      }
+    });
+    setPlaylistTracks([...tracks]);
+  };
+
   return (
     <div>
-      {addTrack(1)}
       <Header />
       <div className="App">
         <SearchBar />
         <div className="App-playlist">
-          <SearchResults searchResults={searchResults} />
+          <SearchResults searchResults={searchResults} onAdd={addTrack} />
           <Playlist
             playlistName={playlistName}
             playlistTracks={playlistTracks}
+            onRemove={removeTrack}
           />
         </div>
       </div>
