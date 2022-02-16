@@ -63,6 +63,9 @@ function App() {
     });
     setPlaylistTracks([...tracks]);
   };
+  const updateName = (e) => {
+    setplaylistName(e.target.value);
+  };
 
   return (
     <div>
@@ -75,6 +78,7 @@ function App() {
             playlistName={playlistName}
             playlistTracks={playlistTracks}
             onRemove={removeTrack}
+            updateName={updateName}
           />
         </div>
       </div>
