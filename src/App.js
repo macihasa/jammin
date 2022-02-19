@@ -5,41 +5,28 @@ import SearchResults from './components/SearchResults/SearchResults';
 import Playlist from './components/Playlist/Playlist';
 import { useState } from 'react';
 
+import search from './util/Spotify';
+
 function App() {
   // States: searchResult(array of objects), playlistName(string), playlistTracks(array of objects) trackURIs(array)
 
-  const [searchResults, setsearchResults] = useState([
-    {
-      id: '1',
-      uri: '11',
-      name: 'Best friend',
-      artist: 'Billy Joel',
-      album: 'Long lasting journey',
-    },
-    {
-      id: '2',
-      uri: '22',
-      name: 'Purple Haze',
-      artist: 'Jimmy Hendrix',
-      album: 'Purple Haze',
-    },
-  ]);
-  const [playlistName, setplaylistName] = useState('New Playlist');
-
+  const [searchTerm, setsearchTerm] = useState('');
+  const [searchResults, setsearchResults] = useState([]);
+  const [playlistName, setplaylistName] = useState('New Playlst');
   const [playlistTracks, setPlaylistTracks] = useState([
     {
       id: '3',
-      uri: '33',
       name: 'All of the lights',
       artist: 'Kanye West',
       album: 'Dark beautiful twisted fantasy',
+      uri: '33',
     },
     {
       id: '4',
-      uri: '44',
       name: 'The Dress',
       artist: 'Dijon',
       album: 'Absolutely',
+      uri: '44',
     },
   ]);
   const [trackURIs, setTrackURIs] = useState([]);
@@ -85,11 +72,21 @@ function App() {
     setTrackURIs([...uri]);
   };
 
+  const searchInput = (e) => {
+    setsearchTerm(e.target.value);
+  };
+  const searchOutput = () => {
+    search(searchTerm).then((searchResults) => {
+      setsearchResults([...searchResults]);
+    });
+    console.log(searchResults);
+  };
+
   return (
     <div>
       <Header />
       <div className="App">
-        <SearchBar />
+        <SearchBar onSearchRequest={searchOutput} onSearchInput={searchInput} />
         <div className="App-playlist">
           <SearchResults searchResults={searchResults} onAdd={addTrack} />
           <Playlist

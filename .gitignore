@@ -2,6 +2,7 @@
 
 #My own items
 /src/log.txt
+/src/util/config.js
 
 # dependencies
 /node_modules
