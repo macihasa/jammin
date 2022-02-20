@@ -4,15 +4,15 @@ import SearchBar from './components/SearchBar/SearchBar';
 import SearchResults from './components/SearchResults/SearchResults';
 import Playlist from './components/Playlist/Playlist';
 import { useState } from 'react';
-
 import search from './util/Spotify';
+import { savePlaylist } from './util/Spotify';
 
 function App() {
   // States: searchResult(array of objects), playlistName(string), playlistTracks(array of objects) trackURIs(array)
 
   const [searchTerm, setsearchTerm] = useState('');
   const [searchResults, setsearchResults] = useState([]);
-  const [playlistName, setplaylistName] = useState('New Playlst');
+  const [playlistName, setplaylistName] = useState('New Playlist');
   const [playlistTracks, setPlaylistTracks] = useState([
     {
       id: '3',
@@ -29,7 +29,6 @@ function App() {
       uri: '44',
     },
   ]);
-  const [trackURIs, setTrackURIs] = useState([]);
 
   // METHODS: addTrack removeTrack updateName savePlaylist
 
@@ -58,28 +57,31 @@ function App() {
     setPlaylistTracks([...tracks]);
   };
 
-  // Updates state playlistName with the current name - onChange, input field
+  // Updates state playlistName with the current name - onChange, Input field
   const updateName = (e) => {
     setplaylistName(e.target.value);
   };
 
-  // Updates state trackURIs with the playlist tracks uri component - onClick, savebutton.
-  const savePlaylist = () => {
-    let uri = [];
-    for (let index = 0; index < playlistTracks.length; index++) {
-      uri.push(playlistTracks[index].uri);
-    }
-    setTrackURIs([...uri]);
+  // Updates state trackURIs with the playlist tracks uri component - onClick, Savebutton.
+  const save = () => {
+    let trackUris = playlistTracks.map((track) => track.uri);
+
+    savePlaylist(playlistName, trackUris).then(() => {
+      setplaylistName('New Playlist');
+      setPlaylistTracks([]);
+    });
   };
 
+  // Updates state searchTerm with the value of search input - onChange, input.
   const searchInput = (e) => {
     setsearchTerm(e.target.value);
   };
+
+  // Searches using the spotify-API with a user token and updates state searchResults - onClick, Searchbutton
   const searchOutput = () => {
     search(searchTerm).then((searchResults) => {
       setsearchResults([...searchResults]);
     });
-    console.log(searchResults);
   };
 
   return (
@@ -94,7 +96,7 @@ function App() {
             playlistTracks={playlistTracks}
             onRemove={removeTrack}
             updateName={updateName}
-            onSave={savePlaylist}
+            onSave={save}
           />
         </div>
       </div>
