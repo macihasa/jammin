@@ -13,34 +13,21 @@ function App() {
   const [searchTerm, setsearchTerm] = useState('');
   const [searchResults, setsearchResults] = useState([]);
   const [playlistName, setplaylistName] = useState('New Playlist');
-  const [playlistTracks, setPlaylistTracks] = useState([
-    {
-      id: '3',
-      name: 'All of the lights',
-      artist: 'Kanye West',
-      album: 'Dark beautiful twisted fantasy',
-      uri: '33',
-    },
-    {
-      id: '4',
-      name: 'The Dress',
-      artist: 'Dijon',
-      album: 'Absolutely',
-      uri: '44',
-    },
-  ]);
+  const [playlistTracks, setPlaylistTracks] = useState([]);
 
-  // METHODS: addTrack removeTrack updateName savePlaylist
+  // METHODS: addTrack, removeTrack, updateName, save, searchInput, searchOutput, removeDuplicates
 
   // Adds a track to state playlistTracks from state searchResults - onClick, (+) button
+  // Removes duplicates in search
   const addTrack = (track) => {
     let tracks = playlistTracks;
+    let result = searchResults;
 
     if (tracks.find((savedTrack) => savedTrack.id === track.id)) {
-      console.log(tracks);
       return;
     } else {
       tracks.push(track);
+      removeDuplicates(result);
       setPlaylistTracks([...tracks]);
       return;
     }
@@ -62,7 +49,7 @@ function App() {
     setplaylistName(e.target.value);
   };
 
-  // Updates state trackURIs with the playlist tracks uri component - onClick, Savebutton.
+  // Posts playlistName and playlistTracks to Spotify - onClick, Savebutton.
   const save = () => {
     let trackUris = playlistTracks.map((track) => track.uri);
 
@@ -78,12 +65,23 @@ function App() {
   };
 
   // Searches using the spotify-API with a user token and updates state searchResults - onClick, Searchbutton
+  // Removes duplicates in search
   const searchOutput = () => {
     search(searchTerm).then((searchResults) => {
-      setsearchResults([...searchResults]);
+      removeDuplicates(searchResults);
     });
   };
 
+  // Compares playlist and searchresult uris and removes duplicates in search.
+  const removeDuplicates = (searchResults) => {
+    const uris = playlistTracks.map((track) => track.uri);
+
+    const updatedSearch = searchResults.filter(
+      (track) => !uris.includes(track.uri)
+    );
+
+    setsearchResults([...updatedSearch]);
+  };
   return (
     <div>
       <Header />
