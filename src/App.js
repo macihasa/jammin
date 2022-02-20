@@ -13,22 +13,7 @@ function App() {
   const [searchTerm, setsearchTerm] = useState('');
   const [searchResults, setsearchResults] = useState([]);
   const [playlistName, setplaylistName] = useState('New Playlist');
-  const [playlistTracks, setPlaylistTracks] = useState([
-    {
-      id: '3',
-      name: 'All of the lights',
-      artist: 'Kanye West',
-      album: 'Dark beautiful twisted fantasy',
-      uri: '33',
-    },
-    {
-      id: '4',
-      name: 'The Dress',
-      artist: 'Dijon',
-      album: 'Absolutely',
-      uri: '44',
-    },
-  ]);
+  const [playlistTracks, setPlaylistTracks] = useState([]);
 
   // METHODS: addTrack removeTrack updateName savePlaylist
 
